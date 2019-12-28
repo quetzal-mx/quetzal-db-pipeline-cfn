@@ -1,0 +1,7 @@
+CloudTrails:
+  submodules:
+    QuetzalDbDeployment:
+      resource_name: QuetzalDbDeploymentTrail
+      data_resource:
+        Type: AWS::S3::Object
+      is_logging: true

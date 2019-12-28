@@ -1,0 +1,40 @@
+require:
+  - rubocop-rspec
+
+AllCops:
+  Include:
+    - '**/*.rb'
+
+Layout/AlignParameters:
+  AutoCorrect: true
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*_spec.rb
+    - spec/**/*_example.rb
+    - Rakefile
+
+Metrics/LineLength:
+  Max: 120
+
+Layout/IndentFirstHashElement:
+  AutoCorrect: true
+
+Layout/IndentationConsistency:
+  AutoCorrect: true
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 30
+
+RSpec/ExampleLength:
+  Max: 8
+
+Naming/FileName:
+  Exclude:
+    - Rakefile
+
+Metrics/AbcSize:
+  Max: 20

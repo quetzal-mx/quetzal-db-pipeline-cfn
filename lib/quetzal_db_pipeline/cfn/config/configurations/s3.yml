@@ -1,0 +1,24 @@
+S3LifeCycleRules: &life_cycle
+  Rules:
+    - ExpirationInDays: 1
+      NoncurrentVersionExpirationInDays: 1
+      Status: Enabled
+      AbortIncompleteMultipartUpload:
+        DaysAfterInitiation: 1
+
+S3:
+  submodules:
+    QuetzalDbDeployments:
+      resource_name: QuetzalDbDeploymentsBucket
+      life_cycle: 
+        <<: *life_cycle
+      versioning:
+        Status: Enabled
+    QuetzalDbDeploymentsTrail:
+      resource_name: QuetzalDbDeploymentsTrailBucket
+      life_cycle:
+        <<: *life_cycle
+    QuetzalDbPipeline:
+      resource_name: QuetzalDbPipelineS3Artifacts
+      life_cycle: 
+        <<: *life_cycle

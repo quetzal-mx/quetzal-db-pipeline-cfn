@@ -1,0 +1,14 @@
+S3Policies:
+  submodules:
+    QuetzalDbPipelineDeploymentsTrailBucket:
+      resource_name: QuetzalDbPipelineDeploymentsTrailBucketPolicy
+      bucket_statement:
+        Effect: Allow
+        Principal:
+          Service: cloudtrail.amazonaws.com
+        Action: s3:GetBucketAcl
+      object_statement:
+        Effect: Allow
+        Principal:
+          Service: cloudtrail.amazonaws.com
+        Action: s3:PutObject

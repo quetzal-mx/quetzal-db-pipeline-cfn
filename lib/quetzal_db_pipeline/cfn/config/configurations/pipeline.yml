@@ -1,0 +1,3 @@
+Pipeline:
+  config:
+    resource_name: QuetzalDbPipeline
