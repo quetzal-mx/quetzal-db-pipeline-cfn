@@ -1,0 +1,90 @@
+Approval: &approval
+  ActionTypeId:
+    Category: Approval 
+    Owner: AWS
+    Provider: Manual 
+    Version: 1
+  Configuration:
+    CustomData: Manual approval required for changes in stack
+
+CreateStack: &create_stack_action
+  ActionTypeId:
+    Category: Invoke
+    Owner: AWS
+    Provider: Lambda
+    Version: 1
+  Configuration:
+    # TODO: use ImportValue
+    FunctionName: quetzal-infra-functions-dev-createStack
+  InputArtifacts:
+    - Name: quetzal-db-cfn 
+  RunOrder: 1
+
+CreateChangeSet: &create_changeset_action
+  ActionTypeId:
+    Category: Deploy
+    Owner: AWS
+    Provider: CloudFormation 
+    Version: 1
+  Configuration:
+    ActionMode: CHANGE_SET_REPLACE
+    Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM
+    TemplatePath: quetzal-db-cfn::quetzal-db-create-stack.yml
+  InputArtifacts:
+    - Name: quetzal-db-cfn
+  RunOrder: 200
+
+ExecuteChangeSet: &execute_changeset_action
+  ActionTypeId:
+    Category: Deploy
+    Owner: AWS
+    Provider: CloudFormation 
+    Version: 1
+  Configuration:
+    ActionMode: CHANGE_SET_EXECUTE
+    Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM
+  InputArtifacts:
+    - Name: quetzal-db-cfn
+  RunOrder: 300
+
+SharedActions: &shared_actions
+  create_stack:
+    <<: *create_stack_action
+  create_change_set:
+    <<: *create_changeset_action
+  execute_change_set:
+    <<: *execute_changeset_action
+  change_set_approval:
+    <<: *approval
+    RunOrder: 210
+
+Stages:
+  config:
+    stages:
+      Source:
+        stage_name: Source
+        order: 0
+        actions:
+          QuetzalDBCfnSource:
+            Name: QuetzalDBCfnSource
+            ActionTypeId:
+              Category: Source
+              Owner: AWS
+              Provider: S3
+              Version: 1
+            Configuration:
+              S3ObjectKey: quetzal-db-cfn.zip
+              PollForSourceChanges: False
+            OutputArtifacts:
+              - Name: quetzal-db-cfn
+            RunOrder: 1
+      Beta:
+        stage_name: Beta
+        class: BaseDeployment
+        order: 2
+        parameter_overrides:
+          Stage: beta 
+        actions:
+          <<: *shared_actions
+        stacks:
+          - quetzal_db_pipeline

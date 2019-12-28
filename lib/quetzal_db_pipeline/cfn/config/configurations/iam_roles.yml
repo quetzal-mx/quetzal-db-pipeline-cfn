@@ -1,0 +1,86 @@
+IamRoles:
+  submodules:
+    CloudTrailRole:
+      resource_name: CloudTrailRole
+      assume_role_policy_document:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudtrail.amazonaws.com
+        Version: '2012-10-17'
+      managed_policy_arns:
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+    CfnRole:
+      resource_name: QuetzalDbPipelineCfnRole 
+      assume_role_policy_document:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudformation.amazonaws.com
+        Version: '2012-10-17'
+      policies:
+        - PolicyName: QuetzalDbPipelineCfnPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - iam:*
+                  - logs:Delete*
+                Effect: Allow
+                Resource: '*'
+              - Action:
+                  - ec2:DescribeAccountAttributes
+                  - rds:CreateDBInstance
+                Effect: Allow
+                Resource: '*'
+      managed_policy_arns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+        - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+        - arn:aws:iam::aws:policy/SecretsManagerReadWrite
+    PipelineRole:
+      resource_name: QuetzalDbPipelineRole
+      assume_role_policy_document:
+        Statement:
+          - Action:
+            - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+        Version: '2012-10-17'
+      policies:
+        - PolicyName: CodePipelineAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - iam:PassRole
+                  - sns:Publish
+                Effect: Allow
+                Resource: '*'
+      managed_policy_arns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+    CloudWatchPipelineRole:
+      resource_name: CloudWatchPipelineRole
+      assume_role_policy_document:
+        Statement:
+          - Action:
+            - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - events.amazonaws.com
+        Version: '2012-10-17'
+      managed_policy_arns:
+        - arn:aws:iam::aws:policy/AWSCodePipelineFullAccess

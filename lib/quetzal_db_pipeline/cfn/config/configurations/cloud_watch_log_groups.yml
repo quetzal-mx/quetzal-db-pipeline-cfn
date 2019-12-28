@@ -1,0 +1,5 @@
+CloudWatchLogGroups:
+  submodules:
+    QuetzalDbDeploymentTrail:
+      resource_name: QuetzalDbDeploymentTrailLogGroup
+      retention_days: 3
