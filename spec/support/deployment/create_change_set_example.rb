@@ -38,7 +38,7 @@ RSpec.shared_examples 'deployment/create_change_set' do
       {
         'ActionMode' => 'CHANGE_SET_REPLACE',
         'Capabilities' => 'CAPABILITY_IAM,CAPABILITY_NAMED_IAM',
-        'TemplatePath' => 'quetzal-db-cfn::quetzal-db-create-stack.yml',
+        'TemplatePath' => 'quetzal-db-cfn::quetzal-db-update-stack.yml',
         'RoleArn' => {
           'Fn::GetAtt' => %w[QuetzalDbPipelineCfnRole Arn]
         }
