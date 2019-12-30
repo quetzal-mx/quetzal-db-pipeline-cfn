@@ -35,8 +35,8 @@ IamRoles:
                 Effect: Allow
                 Resource: '*'
               - Action:
-                  - ec2:DescribeAccountAttributes
-                  - rds:CreateDBInstance
+                  - ec2:*
+                  - rds:*
                 Effect: Allow
                 Resource: '*'
       managed_policy_arns:

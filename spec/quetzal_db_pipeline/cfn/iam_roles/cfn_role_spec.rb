@@ -34,7 +34,7 @@ RSpec.describe QuetzalDbPipeline::Cfn::IamRoles::CfnRole do
                   'Resource' => '*'
                 },
                 {
-                  'Action' => ['ec2:DescribeAccountAttributes', 'rds:CreateDBInstance'],
+                  'Action' => ['ec2:*', 'rds:*'],
                   'Effect' => 'Allow',
                   'Resource' => '*'
                 }
