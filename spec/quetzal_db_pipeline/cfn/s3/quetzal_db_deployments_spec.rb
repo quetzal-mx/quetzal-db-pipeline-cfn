@@ -19,7 +19,8 @@ RSpec.describe QuetzalDbPipeline::Cfn::S3::QuetzalDbDeployments do
             'NoncurrentVersionExpirationInDays' => 1,
             'AbortIncompleteMultipartUpload' => {
               'DaysAfterInitiation' => 1
-            }
+            },
+            'Prefix' => 'quetzal-db-cfn.zip'
           }]
         },
         'VersioningConfiguration' => {

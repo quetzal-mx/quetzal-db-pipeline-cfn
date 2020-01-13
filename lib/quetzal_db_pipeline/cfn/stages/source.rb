@@ -41,6 +41,18 @@ module QuetzalDbPipeline
             }
           )
         end
+
+        # @param config [Hash]
+        # @return [Hash]
+        def quetzal_db_config(config)
+          config.deep_merge(
+            Configuration: {
+              S3Bucket: {
+                'Ref' => ::QuetzalDbPipeline::Cfn::S3::QuetzalDbDeployments.resource_name
+              }
+            }
+          )
+        end
       end
     end
   end

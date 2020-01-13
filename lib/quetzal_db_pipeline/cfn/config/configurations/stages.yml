@@ -30,8 +30,10 @@ CreateChangeSet: &create_changeset_action
     ActionMode: CHANGE_SET_REPLACE
     Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM
     TemplatePath: quetzal-db-cfn::quetzal-db-update-stack.yml
+    TemplateConfiguration: quetzal-db-config::quetzal-db-config.json
   InputArtifacts:
     - Name: quetzal-db-cfn
+    - Name: quetzal-db-config
   RunOrder: 200
 
 ExecuteChangeSet: &execute_changeset_action
@@ -77,6 +79,19 @@ Stages:
               PollForSourceChanges: False
             OutputArtifacts:
               - Name: quetzal-db-cfn
+            RunOrder: 1
+          QuetzalDBConfig:
+            Name: QuetzalDBConfig
+            ActionTypeId:
+              Category: Source
+              Owner: AWS
+              Provider: S3
+              Version: 1
+            Configuration:
+              S3ObjectKey: quetzal-db-config.zip
+              PollForSourceChanges: False
+            OutputArtifacts:
+              - Name: quetzal-db-config
             RunOrder: 1
       Beta:
         stage_name: Beta
