@@ -15,7 +15,7 @@ RSpec.describe QuetzalDbPipeline::Cfn::Stages::Source do
     let(:actions) { source_stage['Actions'] }
 
     it 'adds one action in the stage' do
-      expect(actions.count).to eq(1)
+      expect(actions.count).to eq(2)
     end
 
     context 'when creating the QuetzalDBCfnSource action' do
@@ -45,6 +45,36 @@ RSpec.describe QuetzalDbPipeline::Cfn::Stages::Source do
 
       it 'setups the action' do
         expect(quetzal_db_cfn_source_action).to eq(expected_source_action)
+      end
+    end
+
+    context 'when creating the QuetzalDBConfig action' do
+      let(:quetzal_db_config_action) { actions[1] }
+      let(:expected_source_action) do
+        {
+          'Name' => 'QuetzalDBConfig',
+          'ActionTypeId' => {
+            'Category' => 'Source',
+            'Owner' => 'AWS',
+            'Provider' => 'S3',
+            'Version' => 1
+          },
+          'Configuration' => {
+            'S3Bucket' => {
+              'Ref' => 'QuetzalDbDeploymentsBucket'
+            },
+            'S3ObjectKey' => 'quetzal-db-config.zip',
+            'PollForSourceChanges' => false
+          },
+          'OutputArtifacts' => [
+            { 'Name' => 'quetzal-db-config' }
+          ],
+          'RunOrder' => 1
+        }
+      end
+
+      it 'setups the action' do
+        expect(quetzal_db_config_action).to eq(expected_source_action)
       end
     end
   end

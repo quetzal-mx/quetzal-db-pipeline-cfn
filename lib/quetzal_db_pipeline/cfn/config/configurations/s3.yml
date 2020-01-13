@@ -1,17 +1,22 @@
+S3Rule: &s3_rule
+  ExpirationInDays: 1
+  NoncurrentVersionExpirationInDays: 1
+  Status: Enabled
+  AbortIncompleteMultipartUpload:
+    DaysAfterInitiation: 1
+
 S3LifeCycleRules: &life_cycle
   Rules:
-    - ExpirationInDays: 1
-      NoncurrentVersionExpirationInDays: 1
-      Status: Enabled
-      AbortIncompleteMultipartUpload:
-        DaysAfterInitiation: 1
+    - *s3_rule
 
 S3:
   submodules:
     QuetzalDbDeployments:
       resource_name: QuetzalDbDeploymentsBucket
-      life_cycle: 
-        <<: *life_cycle
+      life_cycle:
+        Rules:
+          - <<: *s3_rule
+            Prefix: quetzal-db-cfn.zip
       versioning:
         Status: Enabled
     QuetzalDbDeploymentsTrail:

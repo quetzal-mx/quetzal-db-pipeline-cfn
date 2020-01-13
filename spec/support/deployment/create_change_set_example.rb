@@ -22,9 +22,10 @@ RSpec.shared_examples 'deployment/create_change_set' do
 
   context 'when setting up the input artifacts' do
     let(:input_artifacts) do
-      [{
-        'Name' => 'quetzal-db-cfn'
-      }]
+      [
+        { 'Name' => 'quetzal-db-cfn' },
+        { 'Name' => 'quetzal-db-config' }
+      ]
     end
 
     it 'uses the correct input artifacts' do
@@ -39,6 +40,7 @@ RSpec.shared_examples 'deployment/create_change_set' do
         'ActionMode' => 'CHANGE_SET_REPLACE',
         'Capabilities' => 'CAPABILITY_IAM,CAPABILITY_NAMED_IAM',
         'TemplatePath' => 'quetzal-db-cfn::quetzal-db-update-stack.yml',
+        'TemplateConfiguration' => 'quetzal-db-config::quetzal-db-config.json',
         'RoleArn' => {
           'Fn::GetAtt' => %w[QuetzalDbPipelineCfnRole Arn]
         }
